@@ -17,7 +17,7 @@ useradd roboshop &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Add Application User"
-useradd roboshop
+useradd roboshop &>>${LOG_FILE}
 CheckStatus $?
 
 
