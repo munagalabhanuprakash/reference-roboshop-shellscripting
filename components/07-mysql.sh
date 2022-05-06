@@ -53,7 +53,7 @@ if [ $? -ne 0 ]; then
   CheckStatus $?
 fi
 
-echo 'show plugins;' | mysql -uroot -pRoboShop@1 2>>${LOG_FILE} | grep validate_password &>>${LOG_FILE}
+echo 'show plugins;' | mysql -uroot -pRoboShop@1 2>>${LOG_FILE} | grep validate_password &>>$LOG_FILE
 if [ $? -eq 0 ]; then
   ECHO "Uninstall Password Validation Plugin"
   echo "uninstall plugin validate_password;" |  mysql -uroot -pRoboShop@1 &>>$LOG_FILE
@@ -61,7 +61,7 @@ if [ $? -eq 0 ]; then
 fi
 
 ECHO "Download Schema"
-curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip" &>>${LOG_FILE}
+curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip" &>>$LOG_FILE
 CheckStatus $?
 
 ECHO "Moving to /tmp folder"
