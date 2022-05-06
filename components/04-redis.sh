@@ -14,6 +14,9 @@ CheckStatus $?
 ECHO "Updating Bind ip in /etc/redis.conf and /etc/redis/redis.conf"
 sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/redis.conf -e 's/127.0.0.1/0.0.0.0/' /etc/redis/redis.conf &>>${LOG_FILE}
 CheckStatus $?
-# systemctl enable redis
-# systemctl start redis
+
+ECHO "Start Redis Database"
+systemctl enable redis &>>${LOG_FILE} && systemctl start redis &>>${LOG_FILE}
+
+
 
