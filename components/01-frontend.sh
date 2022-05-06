@@ -38,7 +38,7 @@ CheckStatus $?
 ECHO "Update Nginx Configuration"
 sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' /etc/nginx/default.d/roboshop.conf
 #-e '/user/ s/localhost/user.roboshop.internal/' -e '/cart/ s/localhost/cart.roboshop.internal/'
-statusCheck $?
+CheckStatus $?
 
 ECHO "restarting the NGINX Webserver"
 systemctl restart nginx &>>${LOG_FILE}
