@@ -17,7 +17,6 @@ if [ $? -ne 0 ]; then
     useradd roboshop &>>${LOG_FILE}
 fi
 # Note: Here We are checking whether the roboshop user already exists or not by checking the status code (0 if Exists and Non zero if user exists)and if not we are creating one
-$ npm install
 
 ECHO "Downloading the content"
 curl -s -L -o /tmp/catalogue.zip "https://github.com/roboshop-devops-project/catalogue/archive/main.zip" &>>${LOG_FILE}
@@ -39,5 +38,9 @@ ECHO "Installing npm"
 npm install &>>${LOG_FILE}
 CheckStatus $?
 
+# mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
+# systemctl daemon-reload
+# systemctl start catalogue
+# systemctl enable catalogue
 
 
