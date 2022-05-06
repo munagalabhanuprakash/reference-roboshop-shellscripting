@@ -60,12 +60,9 @@ if [ $? -eq 0 ]; then
   CheckStatus $?
 fi
 
-ECHO "Download Schema"
-curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip" &>>$LOG_FILE
-CheckStatus $?
-
-ECHO "Unzipping the schema"
-unzip -o /tmp/mysql.zip &>>$LOG_FILE
+ECHO "Download and extracting Schema"
+cd /tmp
+curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip" &>>$LOG_FILE && unzip -o /tmp/mysql.zip &>>$LOG_FILE
 CheckStatus $?
 
 ECHO "Load Schema"
