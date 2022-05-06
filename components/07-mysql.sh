@@ -26,8 +26,9 @@ CheckStatus $?
   # 2022-05-06T17:37:48.179239Z 1 [Note] A temporary password is generated for root@localhost: >!SZhS7ru>>b
   #[ centos@mysql ~/roboshop ]$ sudo grep 'A temporary password' /var/log/mysqld.log | awk '{print $NF}'
 
-ECHO "grabbing the default password and pass it on to a file"
+ECHO "Grabbing the default password and pass it on to a file"
 DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | awk '{print $NF}')
+CheckStatus $?
 
 # Now we need to login to sql and change the password for this i woudl login with default password
 # using mysql -uroot -p${DEFAULT_PASSWORD} and then run the sql specific command
@@ -35,7 +36,9 @@ DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | awk '{print
 # to change the password and pass it on into a file using input redirector and send that to mysql as a file
 # in the above sql command change user to root and hotname to localhost
 
+ECHO "Moving the new password to a file"
 echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">/tmp/root-pass.sql
+CheckStatus $?
 
 # Here in teh next step teh command mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
 #runs fine for the first time but when we rerun teh command it fails because the default password has already been reset
