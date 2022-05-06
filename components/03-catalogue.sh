@@ -45,11 +45,11 @@ ECHO "Changing Permissions"
 chown roboshop:roboshop /home/roboshop/catalogue -R &>>${LOG_FILE}
 CheckStatus $?
 
+ECHO "Update SystemD file with correct IP addresse"
+sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/catalogue/systemd.service &>>${LOG_FILE}
+CheckStatus $?
 
-
-# mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
-# systemctl daemon-reload
-# systemctl start catalogue
-# systemctl enable catalogue
-
-
+ECHO "Setup Systemd"
+mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
+systemctl daemon-reload &>>${LOG_FILE} && systemctl start catalogue &>>${LOG_FILE} && systemctl enable catalogue &>>${LOG_FILE}
+CheckStatus $?
