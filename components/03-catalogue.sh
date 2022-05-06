@@ -4,8 +4,10 @@ source components/00-common.sh
 CheckRootUser
 
 
-ECHO "Downloading NodeJS, Installing NodeJS and Compiler"
+ECHO "Configure NodeJS Repos "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG_FILE}
+
+ECHO "Installing NodeJS and Compiler"
 yum install nodejs gcc-c++ -y &>>${LOG_FILE}
 CheckStatus $?
 
@@ -14,11 +16,8 @@ ECHO "Removing any existing roboshop user and Adding roboshop User"
 useradd roboshop &>>${LOG_FILE}
 CheckStatus $?
 
-#ECHO "Switching to User"
-#id roboshop
-#if [ $? -ne "0"]; then
-#  echo "Adding Application user (roboshop)"
-#  useradd roboshop &>>${LOG_FILE}
-#  CheckStatus $?
-#fi
+ECHO "Add Application User"
+useradd roboshop
+CheckStatus $?
+
 
