@@ -34,7 +34,7 @@ DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | awk '{print
 # to change the password and pass it on into a file using input redirector and send that to mysql as a file
 # in the above sql command change user to root and hotname to localhost
 
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">tmp/root-pass.sql
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">/tmp/root-pass.sql
 
 mysql -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql
 
