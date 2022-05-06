@@ -35,9 +35,9 @@ ECHO "Unzipping Schema"
 unzip mongodb.zip &>>${LOG_FILE}
 CheckStatus $?
 
-#ECHO "Moving to mongodb-main"
-#cd /mongodb-main &>>${LOG_FILE}
-#CheckStatus $?
+ECHO "Moving to mongodb-main"
+cd /mongodb-main &>>${LOG_FILE}
+CheckStatus $?
 #
 #ECHO "Load Schema"
 #mongo < catalogue.js &>>${LOG_FILE} && mongo < users.js &>>${LOG_FILE}
