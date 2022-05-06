@@ -32,7 +32,7 @@ cd /tmp &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Unzipping Schema"
-unzip mongodb.zip &>>${LOG_FILE}
+unzip -o mongodb.zip &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Moving to mongodb-main"
