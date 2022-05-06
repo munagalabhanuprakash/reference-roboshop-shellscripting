@@ -22,7 +22,7 @@ CheckStatus()
      echo -e "----SUCCESS----\n"
   else
     echo -e "----FAILURE----\n"
-    echo Check Error Log for more info
+    echo -e "Check Error Log for more info!!!!!!!!\n"
  fi
 }
 #-----------------------------------------------------------------------------------------------------------------------
