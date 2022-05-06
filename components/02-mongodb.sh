@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source components/00commons.sh
+source components/00-commons.sh
 CheckRootUser
 
 ECHO "Setup mongodb Repos"
