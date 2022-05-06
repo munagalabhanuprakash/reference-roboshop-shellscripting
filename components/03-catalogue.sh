@@ -28,15 +28,15 @@ cd /home/roboshop &>>${LOG_FILE} && unzip -o /tmp/catalogue.zip &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Moving catalogue-main folder to catalogue"
-mv catalogue-main catalogue
+mv catalogue-main catalogue &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "change directory to catalogue directory"
-cd /home/roboshop/catalogue
+cd /home/roboshop/catalogue &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Installing npm"
-npm install
+npm install &>>${LOG_FILE}
 CheckStatus $?
 
 
