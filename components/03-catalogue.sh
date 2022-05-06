@@ -6,6 +6,7 @@ CheckRootUser
 
 ECHO "Configure NodeJS Repos "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG_FILE}
+CheckStatus $?
 
 ECHO "Installing NodeJS and Compiler"
 yum install nodejs gcc-c++ -y &>>${LOG_FILE}
@@ -23,7 +24,7 @@ curl -s -L -o /tmp/catalogue.zip "https://github.com/roboshop-devops-project/cat
 CheckStatus $?
 
 ECHO "Moving to roboshop folder and unzipping the file"
-cd /home/roboshop &>>${LOG_FILE} && unzip -o /tmp/catalogue.zip &>>${LOG_FILE}
+cd /home/roboshop &>>${LOG_FILE} && rm -rf catalogue &>>${LOG_FILE} && unzip -o /tmp/catalogue.zip &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Moving catalogue-main folder to catalogue"
@@ -34,9 +35,17 @@ ECHO "change directory to catalogue directory"
 cd /home/roboshop/catalogue &>>${LOG_FILE}
 CheckStatus $?
 
-ECHO "Installing npm"
+ECHO "Installing nodejs files"
 npm install &>>${LOG_FILE}
 CheckStatus $?
+
+#Note: As we have run the above commands as root user we need to set the permissions to the Application user to access these files
+
+ECHO "Changing Permissions"
+chown roboshop:roboshop /home/roboshop/catalogue -R &>>${LOG_FILE}
+CheckStatus $?
+
+
 
 # mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
 # systemctl daemon-reload
