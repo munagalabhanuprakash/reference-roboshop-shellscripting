@@ -19,14 +19,14 @@ ECHO "Configure Listen Address in monogdb Configuration"
 sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>>${LOG_FILE}
 CheckStatus $?
 
-#ECHO "Restarting mongodb"
-#systemctl restart mongod &>>${LOG_FILE}
-#CheckStatus $?
-#
-#ECHO "Downloading the Schema"
-#curl -s -L -o /tmp/mongodb.zip "https://github.com/roboshop-devops-project/mongodb/archive/main.zip" &>>${LOG_FILE}
-#CheckStatus $?
-#
+ECHO "Restarting mongodb"
+systemctl restart mongod &>>${LOG_FILE}
+CheckStatus $?
+
+ECHO "Downloading the Schema"
+curl -s -L -o /tmp/mongodb.zip "https://github.com/roboshop-devops-project/mongodb/archive/main.zip" &>>${LOG_FILE}
+CheckStatus $?
+
 #ECHO "Moving to temp Folder"
 #cd /tmp &>>${LOG_FILE}
 #CheckStatus $?
