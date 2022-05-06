@@ -26,6 +26,7 @@ CheckStatus $?
   # 2022-05-06T17:37:48.179239Z 1 [Note] A temporary password is generated for root@localhost: >!SZhS7ru>>b
   #[ centos@mysql ~/roboshop ]$ sudo grep 'A temporary password' /var/log/mysqld.log | awk '{print $NF}'
 
+ECHO "grabbing the default password and pass it on to a file"
 DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | awk '{print $NF}')
 
 # Now we need to login to sql and change the password for this i woudl login with default password
@@ -35,8 +36,9 @@ DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | awk '{print
 # in the above sql command change user to root and hotname to localhost
 
 echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">/tmp/root-pass.sql
-
-mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql
+ECHO "Resetting the default password for mysql"
+mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
+CheckStatus $?
 
 
 # mysql_secure_installation
