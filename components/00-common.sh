@@ -65,9 +65,9 @@ ECHO "Moving to roboshop folder and unzipping the file"
 cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG_FILE} && unzip /tmp/${COMPONENT}.zip &>>${LOG_FILE} && mv ${COMPONENT}-main ${COMPONENT}
 CheckStatus $?
 
-ECHO "Moving ${COMPONENT}-main folder to ${COMPONENT}"
-mv ${COMPONENT}-main ${COMPONENT} &>>${LOG_FILE}
-CheckStatus $?
+#ECHO "Moving ${COMPONENT}-main folder to ${COMPONENT}"
+#mv ${COMPONENT}-main ${COMPONENT} &>>${LOG_FILE}
+#CheckStatus $?
 
 ECHO "change directory to ${COMPONENT} directory"
 cd /home/roboshop/${COMPONENT} &>>${LOG_FILE}
