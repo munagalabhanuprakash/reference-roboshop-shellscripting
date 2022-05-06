@@ -42,7 +42,7 @@ echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">/tmp/root-pass.
 # and the command fails so to over come this we set a if condition to check if teh password is working and is showing
 # the database connection then proceed otherwise rest password
 
-echo show databases | mysql -uroot -pRoboShop@1 &>>$LOG_FILE
+echo show databases | mysql -uroot -pRoboShop@1 &>>${LOG_FILE}
 if [ $? -ne 0 ]; then
   ECHO "Reset MySQL Password"
   mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
