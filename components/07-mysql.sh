@@ -46,6 +46,7 @@ CheckStatus $?
 # the database connection then proceed otherwise rest password
 ECHO "Checking whether we are able to login to mysql using the new password"
 echo show databases | mysql -uroot -pRoboShop@1 &>>$LOG_FILE
+CheckStatus $?
 if [ $? -ne 0 ]; then
   ECHO "Reset MySQL Password"
   mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
