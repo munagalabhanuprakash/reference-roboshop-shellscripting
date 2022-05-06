@@ -36,7 +36,7 @@ unzip -o mongodb.zip &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Moving to mongodb-main"
-cd /mongodb-main &>>${LOG_FILE}
+cd mongodb-main &>>${LOG_FILE}
 CheckStatus $?
 #
 #ECHO "Load Schema"
