@@ -2,5 +2,5 @@
 
 source /home/centos/roboshop/components/00-common.sh
 CheckRootUser
-COMPONENT= user
+COMPONENT=user
 NODEJS
