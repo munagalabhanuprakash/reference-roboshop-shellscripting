@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source components/00commons.sh
+source components/00common.sh
 CheckRootUser
 
 ECHO "Installing Webserver NGINX"
