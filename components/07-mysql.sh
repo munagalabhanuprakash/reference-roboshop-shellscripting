@@ -50,14 +50,14 @@ CheckStatus $?
 if [ $? -ne 0 ]; then
   ECHO "Reset MySQL Password"
   mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
-  statusCheck $?
+  CheckStatus $?
 fi
 
 echo 'show plugins;' | mysql -uroot -pRoboShop@1 2>>${LOG_FILE} | grep validate_password &>>${LOG_FILE}
 if [ $? -eq 0 ]; then
   ECHO "Uninstall Password Validation Plugin"
   echo "uninstall plugin validate_password;" |  mysql -uroot -pRoboShop@1 &>>$LOG_FILE
-  statusCheck $?
+  CheckStatus $?
 fi
 
 ECHO "Download Schema"
