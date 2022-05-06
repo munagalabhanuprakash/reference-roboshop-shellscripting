@@ -40,7 +40,8 @@ ECHO()
 }
 #-----------------------------------------------------------------------------------------------------------------------
 
-NODEJS
+NODEJS()
+{
 ECHO "Configure NodeJS Repos "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${LOG_FILE}
 CheckStatus $?
@@ -57,18 +58,18 @@ fi
 # Note: Here We are checking whether the roboshop user already exists or not by checking the status code (0 if Exists and Non zero if user exists)and if not we are creating one
 
 ECHO "Downloading the content"
-curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/catalogue/archive/main.zip" &>>${LOG_FILE}
+curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip" &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Moving to roboshop folder and unzipping the file"
 cd /home/roboshop &>>${LOG_FILE} && rm -rf ${COMPONENT} &>>${LOG_FILE} && unzip -o /tmp/${COMPONENT}.zip &>>${LOG_FILE}
 CheckStatus $?
 
-ECHO "Moving catalogue-main folder to catalogue"
+ECHO "Moving ${COMPONENT}-main folder to ${COMPONENT}"
 mv ${COMPONENT}-main ${COMPONENT} &>>${LOG_FILE}
 CheckStatus $?
 
-ECHO "change directory to catalogue directory"
+ECHO "change directory to ${COMPONENT} directory"
 cd /home/roboshop/${COMPONENT} &>>${LOG_FILE}
 CheckStatus $?
 
@@ -90,3 +91,4 @@ ECHO "Setup Systemd"
 mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
 systemctl daemon-reload &>>${LOG_FILE} && systemctl start ${COMPONENT} &>>${LOG_FILE} && systemctl enable ${COMPONENT} &>>${LOG_FILE}
 CheckStatus $?
+}
