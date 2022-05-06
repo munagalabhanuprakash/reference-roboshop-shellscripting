@@ -27,14 +27,14 @@ ECHO "Downloading the Schema"
 curl -s -L -o /tmp/mongodb.zip "https://github.com/roboshop-devops-project/mongodb/archive/main.zip" &>>${LOG_FILE}
 CheckStatus $?
 
-#ECHO "Moving to temp Folder"
-#cd /tmp &>>${LOG_FILE}
-#CheckStatus $?
-#
-#ECHO "Unzipping Schema"
-#unzip mongodb.zip &>>${LOG_FILE}
-#CheckStatus $?
-#
+ECHO "Moving to temp Folder"
+cd /tmp &>>${LOG_FILE}
+CheckStatus $?
+
+ECHO "Unzipping Schema"
+unzip mongodb.zip &>>${LOG_FILE}
+CheckStatus $?
+
 #ECHO "Moving to mongodb-main"
 #cd /mongodb-main &>>${LOG_FILE}
 #CheckStatus $?
