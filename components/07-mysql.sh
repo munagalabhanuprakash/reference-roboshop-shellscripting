@@ -36,7 +36,7 @@ CheckStatus $?
 # to change the password and pass it on into a file using input redirector and send that to mysql as a file
 # in the above sql command change user to root and hotname to localhost
 
-ECHO "Moving the new password to a file"
+ECHO "Moving the new password to a file and passing it onto mysql"
 echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">/tmp/root-pass.sql
 CheckStatus $?
 
@@ -53,14 +53,26 @@ if [ $? -ne 0 ]; then
   statusCheck $?
 fi
 
+echo 'show plugins;' | mysql -uroot -pRoboShop@1 2>>${LOG_FILE} | grep validate_password &>>${LOG_FILE}
+if [ $? -eq 0 ]; then
+  ECHO "Uninstall Password Validation Plugin"
+  echo "uninstall plugin validate_password;" |  mysql -uroot -pRoboShop@1 &>>$LOG_FILE
+  statusCheck $?
+fi
 
+ECHO "Download Schema"
+curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip" &>>${LOG_FILE}
+CheckStatus $?
 
-# > uninstall plugin validate_password;
+ECHO "Moving to /tmp folder"
+cd /tmp
+CheckStatus $?
 
-# curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
+ECHO "Unzipping the schema"
+unzip -o mysql.zip &>>$LOG_FILE
+CheckStatus $?
 
-# cd /tmp
-# unzip mysql.zip
-# cd mysql-main
-# mysql -u root -pRoboShop@1 <shipping.sql
-
+ECHO "Load Schema"
+cd mysql-main
+mysql -u root -pRoboShop@1 <shipping.sql &>>$LOG_FILE
+CheckStatus $?
