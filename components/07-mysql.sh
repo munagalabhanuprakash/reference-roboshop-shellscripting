@@ -37,7 +37,7 @@ CheckStatus $?
 # in the above sql command change user to root and hotname to localhost
 
 ECHO "Moving the new password to a file and passing it onto mysql"
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">/tmp/root-pass.sql
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';" >/tmp/root-pass.sql
 CheckStatus $?
 
 # Here in teh next step teh command mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
@@ -45,15 +45,14 @@ CheckStatus $?
 # and the command fails so to over come this we set a if condition to check if teh password is working and is showing
 # the database connection then proceed otherwise rest password
 ECHO "Checking whether we are able to login to mysql using the new password"
-echo show databases | mysql -uroot -pRoboShop@1 &>>${LOG_FILE}
-CheckStatus $?
+echo show databases | mysql -uroot -pRoboShop@1 &>>$LOG_FILE
 if [ $? -ne 0 ]; then
   ECHO "Reset MySQL Password"
   mysql --connect-expired-password -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql &>>${LOG_FILE}
   CheckStatus $?
 fi
 
-echo 'show plugins;' | mysql -uroot -pRoboShop@1 2>>${LOG_FILE} | grep validate_password &>>$LOG_FILE
+echo 'show plugins;' | mysql -uroot -pRoboShop@1 2>>${LOG_FILE} | grep validate_password &>>${LOG_FILE}
 if [ $? -eq 0 ]; then
   ECHO "Uninstall Password Validation Plugin"
   echo "uninstall plugin validate_password;" |  mysql -uroot -pRoboShop@1 &>>$LOG_FILE
@@ -73,6 +72,6 @@ unzip -o mysql.zip &>>$LOG_FILE
 CheckStatus $?
 
 ECHO "Load Schema"
-cd mysql-main
-mysql -u root -pRoboShop@1 <shipping.sql &>>$LOG_FILE
+cd /tmp/mysql-main
+mysql -u root -pRoboShop@1 <shipping.sql &>>${LOG_FILE}
 CheckStatus $?
