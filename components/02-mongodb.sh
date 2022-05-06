@@ -15,9 +15,9 @@ ECHO "Enabling and Starting mongodb"
 systemctl enable mongod &>>${LOG_FILE} && systemctl start mongod &>>${LOG_FILE}
 CheckStatus $?
 
-#ECHO "Configure Listen Address in MonogBD Configuration"
-#sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>>${LOG_FILE}
-#CheckStatus $?
+ECHO "Configure Listen Address in monogdb Configuration"
+sed -i -e 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf &>>${LOG_FILE}
+CheckStatus $?
 
 #ECHO "Restarting mongodb"
 #systemctl restart mongod &>>${LOG_FILE}
