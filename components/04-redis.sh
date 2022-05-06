@@ -17,6 +17,7 @@ CheckStatus $?
 
 ECHO "Start Redis Database"
 systemctl enable redis &>>${LOG_FILE} && systemctl start redis &>>${LOG_FILE}
+CheckStatus $?
 
 
 
