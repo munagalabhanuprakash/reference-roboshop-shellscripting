@@ -16,8 +16,28 @@ systemctl enable mysqld &>>${LOG_FILE}
 systemctl start mysqld &>>${LOG_FILE}
 CheckStatus $?
 
+# I have to grab the default password from the mysqld.log file for this i execute the grep command fist
+# observe the output then take a unique keyword from teh default password line which is unique to that
+# line itself and then use the awk command to grab it and set it to default as variable.
+# [ centos@mysql ~/roboshop ]$ sudo grep temp /var/log/mysqld.log
+  # 2022-05-06T17:37:48.179239Z 1 [Note] A temporary password is generated for root@localhost: >!SZhS7ru>>b
+  # 2022-05-06T17:37:51.246955Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+  # [ centos@mysql ~/roboshop ]$ sudo grep 'A temporary password' /var/log/mysqld.log
+  # 2022-05-06T17:37:48.179239Z 1 [Note] A temporary password is generated for root@localhost: >!SZhS7ru>>b
+  #[ centos@mysql ~/roboshop ]$ sudo grep 'A temporary password' /var/log/mysqld.log | awk '{print $NF}'
 
-# grep temp /var/log/mysqld.log
+DEFAULT_PASSWORD=$(grep 'A temporary password' /var/log/mysqld.log | awk '{print $NF}')
+
+# Now we need to login to sql and change the password for this i woudl login with default password
+# using mysql -uroot -p${DEFAULT_PASSWORD} and then run the sql specific command
+# (ALTER USER 'user'@'hostname' IDENTIFIED BY 'newPass';)
+# to change the password and pass it on into a file using input redirector and send that to mysql as a file
+# in the above sql command change user to root and hotname to localhost
+
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RoboShop@1';">tmp/root-pass.sql
+
+mysql -u root -p${DEFAULT_PASSWORD} </tmp/root-pass.sql
+
 
 # mysql_secure_installation
 
