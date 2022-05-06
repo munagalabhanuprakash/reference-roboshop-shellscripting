@@ -62,7 +62,9 @@ curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/
 CheckStatus $?
 
 ECHO "Moving to roboshop folder and unzipping the file"
-cd /home/roboshop &>>${LOG_FILE} && rm -rf ${COMPONENT} &>>${LOG_FILE} && unzip -o /tmp/${COMPONENT}.zip &>>${LOG_FILE}
+cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG_FILE} && unzip /tmp/${COMPONENT}.zip &>>${LOG_FILE}
+mv ${COMPONENT}-main ${COMPONENT}
+
 CheckStatus $?
 
 ECHO "Moving ${COMPONENT}-main folder to ${COMPONENT}"
