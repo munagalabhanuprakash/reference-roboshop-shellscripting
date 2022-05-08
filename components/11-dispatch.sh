@@ -13,13 +13,13 @@ id roboshop &>>${LOG_FILE}
      useradd roboshop &>>${LOG_FILE}
  fi
 
-curl -L -s -o /tmp/dispatch.zip https://github.com/roboshop-devops-project/dispatch/archive/refs/heads/main.zip
-unzip /tmp/dispatch.zip
-mv dispatch-main dispatch
-cd dispatch
-go mod init dispatch
-go get
-go build
+curl -L -s -o /tmp/dispatch.zip https://github.com/roboshop-devops-project/dispatch/archive/refs/heads/main.zip &>>${LOG_FILE}
+unzip /tmp/dispatch.zip &>>${LOG_FILE}
+mv dispatch-main dispatch &>>${LOG_FILE}
+cd dispatch &>>${LOG_FILE}
+go mod init dispatch &>>${LOG_FILE}
+go get &>>${LOG_FILE}
+go build &>>${LOG_FILE}
 
 ECHO "Changing Permissions"
 chown roboshop:roboshop /home/roboshop/${COMPONENT} -R &>>${LOG_FILE}
