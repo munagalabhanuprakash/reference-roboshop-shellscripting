@@ -39,6 +39,43 @@ ECHO()
   echo "$1"
 }
 #-----------------------------------------------------------------------------------------------------------------------
+APPLICATION_SETUP()
+{
+ id roboshop &>>${LOG_FILE}
+ if [ $? -ne 0 ]; then
+     echo "Adding Application(roboshop) user"
+     useradd roboshop &>>${LOG_FILE}
+ fi
+ # Note: Here We are checking whether the roboshop user already exists or not by checking the status code (0 if Exists and Non zero if user exists)and if not we are creating one
+
+ ECHO "Downloading the content"
+ curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip" &>>${LOG_FILE}
+ CheckStatus $?
+
+ ECHO "Moving to roboshop folder and unzipping the file"
+ cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG_FILE} && unzip /tmp/${COMPONENT}.zip &>>${LOG_FILE} && mv ${COMPONENT}-main ${COMPONENT}
+ CheckStatus $?
+
+ ECHO "change directory to ${COMPONENT} directory"
+ cd /home/roboshop/${COMPONENT} &>>${LOG_FILE}
+ CheckStatus $?
+}
+
+SYSTEMD_SETUP()
+{
+ECHO "Changing Permissions"
+chown roboshop:roboshop /home/roboshop/${COMPONENT} -R &>>${LOG_FILE}
+CheckStatus $?
+
+ECHO "Update SystemD file with correct IP addresse"
+sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} && -e 's/CARTENDPOINT/cart.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} && -e 's/DBHOST/mysql.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE}
+CheckStatus $?
+
+ECHO "Setup Systemd"
+mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
+systemctl daemon-reload &>>${LOG_FILE} && systemctl start ${COMPONENT} &>>${LOG_FILE} && systemctl enable ${COMPONENT} &>>${LOG_FILE}
+CheckStatus $?
+}
 
 NODEJS()
 {
@@ -50,41 +87,24 @@ ECHO "Installing NodeJS and Compiler"
 yum install nodejs gcc-c++ -y &>>${LOG_FILE}
 CheckStatus $?
 
-id roboshop &>>${LOG_FILE}
-if [ $? -ne 0 ]; then
-    echo "Adding Application(roboshop) user"
-    useradd roboshop &>>${LOG_FILE}
-fi
-# Note: Here We are checking whether the roboshop user already exists or not by checking the status code (0 if Exists and Non zero if user exists)and if not we are creating one
-
-ECHO "Downloading the content"
-curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip" &>>${LOG_FILE}
-CheckStatus $?
-
-ECHO "Moving to roboshop folder and unzipping the file"
-cd /home/roboshop && rm -rf ${COMPONENT} &>>${LOG_FILE} && unzip /tmp/${COMPONENT}.zip &>>${LOG_FILE} && mv ${COMPONENT}-main ${COMPONENT}
-CheckStatus $?
-
-ECHO "change directory to ${COMPONENT} directory"
-cd /home/roboshop/${COMPONENT} &>>${LOG_FILE}
-CheckStatus $?
+APPLICATION_SETUP
 
 ECHO "Installing nodejs files"
 npm install &>>${LOG_FILE}
 CheckStatus $?
+SYSTEMD_SETUP
+}
 
-#Note: As we have run the above commands as root user we need to set the permissions to the Application user to access these files
+JAVA()
+{
+  yum install maven -y &>>$LOG_FILE
 
-ECHO "Changing Permissions"
-chown roboshop:roboshop /home/roboshop/${COMPONENT} -R &>>${LOG_FILE}
-CheckStatus $?
+  APPLICATION_SETUP
 
-ECHO "Update SystemD file with correct IP addresse"
-sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE} -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG_FILE}
-CheckStatus $?
+  ECHO "Compile Maven Package"
+    cd /home/roboshop/${COMPONENT} && mvn clean package &>>${LOG_FILE} && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>>${LOG_FILE}
+    CheckStatus $?
 
-ECHO "Setup Systemd"
-mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
-systemctl daemon-reload &>>${LOG_FILE} && systemctl start ${COMPONENT} &>>${LOG_FILE} && systemctl enable ${COMPONENT} &>>${LOG_FILE}
-CheckStatus $?
+  SYSTEMD_SETUP
+
 }

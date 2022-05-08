@@ -18,3 +18,6 @@ cart:
 
 mysql:
 	@bash components/07-mysql.sh
+
+shipping:
+	@bash components/08-shipping.sh
