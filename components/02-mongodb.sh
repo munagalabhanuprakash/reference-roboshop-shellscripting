@@ -40,5 +40,7 @@ cd mongodb-main &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Load Schema"
-mongo < catalogue.js &>>${LOG_FILE} && mongo < users.js &>>${LOG_FILE}
+for component in catalogue users ; do
+mongo < ${component}.js >>${LOG_FILE}
+done
 CheckStatus $?

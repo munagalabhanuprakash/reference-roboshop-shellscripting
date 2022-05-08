@@ -36,8 +36,11 @@ mv localhost.conf /etc/nginx/default.d/roboshop.conf &>>${LOG_FILE}
 CheckStatus $?
 
 ECHO "Update Nginx Configuration"
-sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' /etc/nginx/default.d/roboshop.conf -e '/user/ s/localhost/user.roboshop.internal/' /etc/nginx/default.d/roboshop.conf -e '/cart/ s/localhost/cart.roboshop.internal/' /etc/nginx/default.d/roboshop.conf &>>${LOG_FILE}
-CheckStatus $?
+for component in catalogue user cart shipping payment ; do
+  ECHO "Update Configuration for ${component}"
+  sed -i -e "/${component}/ s/localhost/${component}.roboshop.internal/"  /etc/nginx/default.d/roboshop.conf
+  CheckStatus $?
+done
 
 ECHO "restarting the NGINX Webserver"
 systemctl restart nginx &>>${LOG_FILE}
