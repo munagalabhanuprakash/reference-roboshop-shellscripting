@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source components/common.sh
+source components/00-common.sh
 checkRootUser
 COMPONENT=shipping
 JAVA
