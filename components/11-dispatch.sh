@@ -24,8 +24,8 @@ go build
 ECHO "Changing Permissions"
 chown roboshop:roboshop /home/roboshop/${COMPONENT} -R &>>${LOG_FILE}
 CheckStatus $?
-
-mv /home/roboshop/dispatch/systemd.service /etc/systemd/system/dispatch.service
-systemctl daemon-reload
-systemctl enable dispatch
-systemctl start dispatch
+#
+#mv /home/roboshop/dispatch/systemd.service /etc/systemd/system/dispatch.service
+#systemctl daemon-reload
+#systemctl enable dispatch
+#systemctl start dispatch
