@@ -24,7 +24,16 @@ go build &>>${LOG_FILE}
 ECHO "Changing Permissions"
 chown roboshop:roboshop /home/roboshop/${COMPONENT} -R &>>${LOG_FILE}
 CheckStatus $?
-#
+
+ECHO "Update SystemD file with correct IP addresse"
+sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service
+CheckStatus $?
+
+ECHO "Setup Systemd"
+mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
+systemctl daemon-reload &>>${LOG_FILE} && systemctl start ${COMPONENT} &>>${LOG_FILE} && systemctl enable ${COMPONENT} &>>${LOG_FILE}
+CheckStatus $?
+
 #mv /home/roboshop/dispatch/systemd.service /etc/systemd/system/dispatch.service
 #systemctl daemon-reload
 #systemctl enable dispatch
